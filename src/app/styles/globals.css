@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Neo-brutalism palette */
+  --color-bg: #FFFEF2;
+  --color-fg: #1a1a1a;
+  --color-primary: #FF6B35;
+  --color-secondary: #4ECDC4;
+  --color-accent: #FFE66D;
+  --color-danger: #FF4757;
+  --color-success: #2ED573;
+  --color-purple: #A855F7;
+  --color-pink: #FF6B9D;
+  --color-blue: #45B7D1;
+  --color-border: #1a1a1a;
+  --color-card: #ffffff;
+  --color-muted: #f5f5f0;
+
+  /* Typography */
+  --font-display: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Borders & Shadows */
+  --border: 3px solid var(--color-border);
+  --border-thin: 2px solid var(--color-border);
+  --shadow: 4px 4px 0px var(--color-border);
+  --shadow-lg: 6px 6px 0px var(--color-border);
+  --shadow-hover: 2px 2px 0px var(--color-border);
+  --radius: 8px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-fg);
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}

@@ -1,0 +1,19 @@
+.card {
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow);
+  transition: all 0.1s ease;
+}
+
+.hoverable:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-hover);
+  cursor: pointer;
+}
+
+.white { background-color: var(--color-card); }
+.primary { background-color: var(--color-primary); color: white; }
+.secondary { background-color: var(--color-secondary); }
+.accent { background-color: var(--color-accent); }
+.muted { background-color: var(--color-muted); }
