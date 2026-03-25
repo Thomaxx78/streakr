@@ -3,8 +3,7 @@ import { z } from 'zod';
 export const UserProfileSchema = z.object({
   id: z.string().uuid(),
   username: z.string(),
-  email: z.string().email(),
-  avatar_url: z.string().url().nullable(),
+  avatar_url: z.string().nullable(),
   xp: z.number().int().nonnegative(),
   level: z.number().int().positive(),
   active_title: z.string().nullable(),
