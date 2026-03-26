@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Flame, Zap, Trophy, Target } from 'lucide-react';
+import { Flame, Zap, Trophy, Target, Check } from 'lucide-react';
 import { Button, Card } from '@/shared/ui';
 import styles from './LandingPage.module.css';
 
@@ -45,7 +45,7 @@ export const LandingPage = () => {
       <main className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.heroTagline}>
-            <span className={styles.tag}>🔥 HABIT TRACKER GAMIFIÉ</span>
+            <span className={styles.tag}><Flame size={14} style={{ display: 'inline', verticalAlign: 'middle' }} /> HABIT TRACKER GAMIFIÉ</span>
           </div>
           <h1 className={styles.heroTitle}>
             Track tes habitudes.
@@ -67,7 +67,7 @@ export const LandingPage = () => {
         <div className={styles.heroVisual}>
           <div className={styles.mockCard}>
             <div className={styles.mockHeader}>
-              <span>🔥 Streak: 14 jours</span>
+              <span><Flame size={14} style={{ display: 'inline', verticalAlign: 'middle' }} /> Streak: 14 jours</span>
               <span className={styles.mockLevel}>LVL 7</span>
             </div>
             <div className={styles.mockTitle}>
@@ -76,7 +76,7 @@ export const LandingPage = () => {
             <div className={styles.mockChecks}>
               {['Méditer', 'Sport', 'Lire', 'Coder'].map((h) => (
                 <div key={h} className={styles.mockCheck}>
-                  <span className={styles.checkDone}>✓</span>
+                  <Check size={14} className={styles.checkDone} />
                   <span>{h}</span>
                 </div>
               ))}

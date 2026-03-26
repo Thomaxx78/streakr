@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
-import { Plus } from 'lucide-react';
+import { Plus, Search, Pencil } from 'lucide-react';
 import { useHabits, HabitCard, HABIT_CATEGORIES, type Habit } from '@/entities/habit';
 import { CreateHabitModal } from '@/features/create-habit';
 import { EditHabitModal } from '@/features/edit-habit';
@@ -44,7 +44,7 @@ function HabitList({ search, category, onEdit }: HabitListProps) {
   if (filtered.length === 0) {
     return (
       <div className={styles.empty}>
-        <span className={styles.emptyIcon}>🔍</span>
+        <Search size={36} className={styles.emptyIcon} />
         <p className={styles.emptyText}>Aucune habitude trouvée.</p>
       </div>
     );
@@ -62,7 +62,7 @@ function HabitList({ search, category, onEdit }: HabitListProps) {
               size="sm"
               onClick={() => onEdit(habit)}
             >
-              ✏️ Modifier
+              <Pencil size={14} /> Modifier
             </Button>
           }
         />

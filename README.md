@@ -1,74 +1,110 @@
-# React + TypeScript + Vite
+# 🔥 STREAKR — Track your habits. Get weird titles.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+Tracker d'habitudes gamifié avec un style neo-brutalism. Crée tes habitudes, coche-les chaque jour, accumule des streaks, monte en niveau et débloque des titres absurdes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Démo
 
-## React Compiler
+[Lien Vercel à ajouter]
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Stack technique
 
-## Expanding the ESLint configuration
+| Outil | Rôle | Justification |
+|---|---|---|
+| **Vite** | Bundler | Plus rapide que CRA/Webpack, HMR instantané. Pas besoin de SSR ni SEO critique → pas de Next.js. |
+| **React 18+** | UI Library | Approche déclarative, écosystème mature |
+| **TypeScript strict** | Typage | Mode strict, zéro any, sécurité maximale |
+| **Feature Sliced Design** | Architecture | Hiérarchie claire des dépendances, scalable, évite les imports circulaires |
+| **Zustand** | State management | Zéro boilerplate, sélecteurs performants, middleware persist natif |
+| **TanStack Query** | Data fetching | Cache intelligent, background refetch, mutations, remplace les useEffect |
+| **Zod** | Validation runtime | Single source of truth pour les types, valide API + formulaires |
+| **React Hook Form** | Formulaires | Performant (pas de re-render), intégration native avec Zod via zodResolver |
+| **Supabase** | Backend | Auth, base PostgreSQL, RLS, temps réel — tout-en-un, rapide à setup |
+| **Recharts** | Graphiques | Bibliothèque React native, typée, personnalisable |
+| **Vitest** | Testing | Compatible Vite nativement, API Jest-compatible |
+| **React Testing Library** | Tests composants | Teste le comportement utilisateur, pas l'implémentation |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📁 Architecture FSD
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── app/                    # Configuration globale (router, providers, styles)
+├── pages/                  # Assemblage des widgets par route
+│   ├── dashboard/
+│   ├── habits/
+│   ├── stats/
+│   ├── profile/
+│   ├── landing/
+│   ├── login/
+│   └── register/
+├── widgets/                # Blocs UI réutilisables composés de features/entities
+│   ├── header/
+│   ├── sidebar/
+│   ├── daily-habits/
+│   └── stats/              # HeatmapCalendar, StreakChart, CategoryBreakdown, StatsOverview
+├── features/               # Actions utilisateur avec effets de bord
+│   ├── auth/               # Login, register, logout
+│   ├── check-in/           # Toggle check-in quotidien
+│   ├── create-habit/       # Formulaire de création
+│   ├── edit-habit/         # Formulaire d'édition
+│   └── gamification/       # Calculs XP, niveau, streak
+├── entities/               # Modèles métier (schémas Zod, API, UI)
+│   ├── habit/              # HabitSchema, HabitCard, habitApi, useHabits
+│   ├── check-in/           # CheckInSchema, checkInApi, useCheckInHistory
+│   └── user/               # UserProfileSchema, userApi, useUserProfile
+└── shared/                 # Utilitaires, composants UI génériques, config
+    ├── config/             # Client Supabase
+    ├── lib/                # useUIStore (Zustand persist), cn()
+    └── ui/                 # Button, Input, Card, Badge
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Règles FSD respectées
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Imports unidirectionnels (haut vers bas uniquement)
+- Chaque slice a un `index.ts` (API publique)
+- Segments standardisés : `ui/`, `model/`, `api/`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## ⚡ Installation
+
+### Prérequis
+
+- Node.js 18+
+- Un projet Supabase (gratuit sur supabase.com)
+
+### 1. Cloner le projet
+
+```bash
+git clone <url>
+cd streakr
+npm install
 ```
-# streakr
+
+### 2. Configurer Supabase
+
+Créez un fichier `.env` à la racine :
+
+```env
+VITE_SUPABASE_URL=votre_url_supabase
+VITE_SUPABASE_ANON_KEY=votre_anon_key
+```
+
+### 3. Créer les tables
+
+Allez dans le SQL Editor de votre projet Supabase et exécutez le contenu de `supabase/migrations/001_initial_schema.sql`.
+
+### 4. Lancer le projet
+
+```bash
+npm run dev
+```
+
+### 5. Lancer les tests
+
+```bash
+npx vitest run
+```
+
+## 👥 Équipe
+
+[Noms des membres du groupe]

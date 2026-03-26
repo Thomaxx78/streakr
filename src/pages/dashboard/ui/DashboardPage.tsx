@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
-import { Flame, Zap, Trophy, Calendar } from 'lucide-react';
+import { Flame, Zap, Trophy, Calendar, Medal } from 'lucide-react';
 import { useUserProfile } from '@/entities/user';
 import { useHabits } from '@/entities/habit';
 import { useTodayCheckIns } from '@/features/check-in';
@@ -90,7 +90,7 @@ function StatsOverview() {
   return (
     <>
       <div className={styles.titleBadge}>
-        <span>🏆</span>
+        <Medal size={16} />
         <span className={styles.titleText}>{title}</span>
       </div>
       <div className={styles.statsGrid}>
@@ -116,7 +116,7 @@ export function DashboardPage() {
   return (
     <div className={styles.page}>
       <div className={styles.greeting}>
-        <h1>Salut, {username ?? 'Streaker'} ! 👋</h1>
+        <h1>Salut, {username ?? 'Streaker'} !</h1>
         <p className={styles.subtitle}>
           {new Date().toLocaleDateString('fr-FR', {
             weekday: 'long',

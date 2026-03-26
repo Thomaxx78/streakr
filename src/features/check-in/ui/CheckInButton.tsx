@@ -1,3 +1,4 @@
+import { Check, Circle } from 'lucide-react';
 import { useToggleCheckIn } from '../model/useCheckIns';
 import styles from './CheckInButton.module.css';
 
@@ -24,7 +25,7 @@ export function CheckInButton({ habitId, isChecked, date }: CheckInButtonProps) 
       disabled={isPending}
       aria-label={isChecked ? 'Décocher' : 'Cocher'}
     >
-      <span className={styles.icon}>{isChecked ? '✓' : '○'}</span>
+      <span className={styles.icon}>{isChecked ? <Check size={16} /> : <Circle size={16} />}</span>
       <span className={styles.label}>{isChecked ? 'Fait !' : 'À faire'}</span>
     </button>
   );

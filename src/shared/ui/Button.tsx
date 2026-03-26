@@ -1,4 +1,5 @@
 import { type ButtonHTMLAttributes } from 'react';
+import { Loader2 } from 'lucide-react';
 import styles from './Button.module.css';
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'accent';
@@ -27,7 +28,7 @@ export const Button = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading ? <span className={styles.spinner}>⏳</span> : children}
+      {isLoading ? <Loader2 size={16} className={styles.spinner} /> : children}
     </button>
   );
 };

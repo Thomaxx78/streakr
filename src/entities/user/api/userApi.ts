@@ -1,6 +1,21 @@
 import { supabase } from '@/shared/config';
 import { UserProfileSchema, type UserProfile } from '../model/userSchema';
 
+export async function updateUserProfile(
+  userId: string,
+  data: Partial<Pick<UserProfile, 'username' | 'avatar_url' | 'active_title'>>,
+): Promise<UserProfile> {
+  const { data: updated, error } = await supabase
+    .from('user_profiles')
+    .update(data)
+    .eq('id', userId)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return UserProfileSchema.parse(updated);
+}
+
 export async function fetchUserProfile(userId: string): Promise<UserProfile> {
   const { data, error } = await supabase
     .from('user_profiles')

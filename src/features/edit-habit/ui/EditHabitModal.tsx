@@ -1,6 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { X, Archive, Trash2 } from 'lucide-react';
 import { HABIT_CATEGORIES, HABIT_ICONS, type Habit } from '@/entities/habit';
 import { Button, Input } from '@/shared/ui';
 import { EditHabitFormSchema, type EditHabitFormData } from '../model/editHabitSchema';
@@ -78,7 +79,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
         <div className={styles.header}>
           <h2 className={styles.title}>Modifier l'habitude</h2>
           <button className={styles.closeBtn} onClick={onClose} type="button">
-            ✕
+            <X size={20} />
           </button>
         </div>
 
@@ -220,7 +221,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
                 onClick={handleArchive}
                 isLoading={archiveMutation.isPending}
               >
-                📦 Archiver
+                <Archive size={14} /> Archiver
               </Button>
               <Button
                 type="button"
@@ -229,7 +230,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
                 onClick={handleDelete}
                 isLoading={deleteMutation.isPending}
               >
-                🗑️ Supprimer
+                <Trash2 size={14} /> Supprimer
               </Button>
             </div>
             <div className={styles.footerRight}>

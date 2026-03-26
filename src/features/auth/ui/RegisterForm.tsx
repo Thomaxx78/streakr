@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
+import { Rocket } from 'lucide-react';
 import { RegisterSchema, type RegisterFormData } from '../model/authSchemas';
 import { registerWithEmail } from '../api/authApi';
 import { Button, Input } from '@/shared/ui';
@@ -38,7 +39,7 @@ export const RegisterForm = () => {
       <div className={styles.formCard}>
         <div className={styles.header}>
           <h1 className={styles.title}>Inscription</h1>
-          <p className={styles.subtitle}>Prêt à streak ? 🚀</p>
+          <p className={styles.subtitle}>Prêt à streak ? <Rocket size={16} style={{ display: 'inline', verticalAlign: 'middle' }} /></p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>

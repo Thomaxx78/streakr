@@ -1,6 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { X } from 'lucide-react';
 import { useAuthStore } from '@/features/auth';
 import { HABIT_CATEGORIES, HABIT_ICONS } from '@/entities/habit';
 import { Button, Input } from '@/shared/ui';
@@ -72,7 +73,7 @@ export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
         <div className={styles.header}>
           <h2 className={styles.title}>Nouvelle habitude</h2>
           <button className={styles.closeBtn} onClick={handleClose} type="button">
-            ✕
+            <X size={20} />
           </button>
         </div>
 

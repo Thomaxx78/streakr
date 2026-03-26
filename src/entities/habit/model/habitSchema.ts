@@ -33,12 +33,12 @@ export type HabitIcon = z.infer<typeof HabitIconEnum>;
 export const HabitSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),
-  name: z.string(),
+  name: z.string().min(1, 'Le nom est requis'),
   description: z.string().nullable(),
   category: z.string(),
   icon: z.string(),
   color: z.string(),
-  xp_per_check: z.number(),
+  xp_per_check: z.number().nonnegative('XP ne peut pas être négatif'),
   is_archived: z.boolean(),
   created_at: z.string(),
 });

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ListChecks, BarChart3, UserCog, X } from 'lucide-react';
+import { LayoutDashboard, ListChecks, BarChart3, UserCog, X, Flame } from 'lucide-react';
 import { useUIStore } from '@/shared/lib/useUIStore';
 import styles from './Sidebar.module.css';
 
@@ -47,7 +47,7 @@ export const Sidebar = () => {
 
         <div className={styles.footer}>
           <div className={styles.footerCard}>
-            <span className={styles.footerEmoji}>🔥</span>
+            <Flame size={22} className={styles.footerEmoji} />
             <p className={styles.footerText}>Continue ton streak !</p>
           </div>
         </div>

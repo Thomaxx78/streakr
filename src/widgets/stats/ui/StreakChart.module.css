@@ -1,0 +1,18 @@
+.card {
+  height: 100%;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  color: var(--color-fg);
+}
+
+.chartWrapper {
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  background-color: var(--color-bg);
+}

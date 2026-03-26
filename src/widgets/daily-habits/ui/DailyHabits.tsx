@@ -1,3 +1,4 @@
+import { Target } from 'lucide-react';
 import { useHabits } from '@/entities/habit';
 import { HabitCard } from '@/entities/habit';
 import { useTodayCheckIns, CheckInButton } from '@/features/check-in';
@@ -14,7 +15,7 @@ export function DailyHabits() {
   if (total === 0) {
     return (
       <div className={styles.empty}>
-        <span className={styles.emptyIcon}>🎯</span>
+        <Target size={36} className={styles.emptyIcon} />
         <p className={styles.emptyText}>Aucune habitude pour l'instant.</p>
         <p className={styles.emptyHint}>Crée ta première habitude dans l'onglet "Mes Habitudes" !</p>
       </div>

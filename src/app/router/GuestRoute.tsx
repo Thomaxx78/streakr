@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/features/auth';
 
 interface GuestRouteProps {
@@ -11,8 +12,9 @@ export const GuestRoute = ({ children }: GuestRouteProps) => {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontFamily: 'var(--font-display)', fontSize: '1.5rem' }}>
-        🔥 Chargement...
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', minHeight: '100vh', fontFamily: 'var(--font-display)', fontSize: '1.5rem' }}>
+        <Loader2 size={28} style={{ animation: 'spin 1s linear infinite' }} />
+        Chargement...
       </div>
     );
   }
