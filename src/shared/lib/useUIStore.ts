@@ -9,6 +9,11 @@ interface UIState {
   setAccentColor: (color: string) => void;
 }
 
+// --- Sélecteurs dérivés (derived state) ---
+export const selectAccentStyle = (s: UIState): Record<string, string> => ({
+  '--color-primary': s.accentColor,
+});
+
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({

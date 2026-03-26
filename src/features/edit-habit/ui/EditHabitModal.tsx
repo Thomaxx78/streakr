@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { X, Archive, Trash2 } from 'lucide-react';
 import { HABIT_CATEGORIES, HABIT_ICONS, type Habit } from '@/entities/habit';
 import { Button, Input } from '@/shared/ui';
+import { useToastStore } from '@/shared/lib/useToastStore';
 import { EditHabitFormSchema, type EditHabitFormData } from '../model/editHabitSchema';
 import { updateHabit, deleteHabit, archiveHabit } from '../api/editHabitApi';
 import styles from './EditHabitModal.module.css';
@@ -20,6 +21,7 @@ interface EditHabitModalProps {
 
 export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
   const queryClient = useQueryClient();
+  const addToast = useToastStore((s) => s.addToast);
 
   const {
     register,
@@ -45,17 +47,20 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
 
   const updateMutation = useMutation({
     mutationFn: (data: EditHabitFormData) => updateHabit(habit.id, data),
-    onSuccess: () => { invalidate(); onClose(); },
+    onSuccess: () => { invalidate(); addToast('Habitude mise à jour !'); onClose(); },
+    onError: (err) => addToast(err instanceof Error ? err.message : 'Erreur', 'error'),
   });
 
   const deleteMutation = useMutation({
     mutationFn: () => deleteHabit(habit.id),
-    onSuccess: () => { invalidate(); onClose(); },
+    onSuccess: () => { invalidate(); addToast(`"${habit.name}" supprimée.`, 'info'); onClose(); },
+    onError: (err) => addToast(err instanceof Error ? err.message : 'Erreur', 'error'),
   });
 
   const archiveMutation = useMutation({
     mutationFn: () => archiveHabit(habit.id),
-    onSuccess: () => { invalidate(); onClose(); },
+    onSuccess: () => { invalidate(); addToast(`"${habit.name}" archivée. 📦`, 'info'); onClose(); },
+    onError: (err) => addToast(err instanceof Error ? err.message : 'Erreur', 'error'),
   });
 
   const onSubmit = (data: EditHabitFormData) => updateMutation.mutate(data);

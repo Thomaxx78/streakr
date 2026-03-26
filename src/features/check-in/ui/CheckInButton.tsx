@@ -14,7 +14,7 @@ export function CheckInButton({ habitId, isChecked, date }: CheckInButtonProps) 
   const { mutate, isPending } = useToggleCheckIn();
 
   const handleClick = () => {
-    mutate({ habitId, date: checkDate });
+    mutate({ habitId, date: checkDate, wasChecked: isChecked });
   };
 
   return (

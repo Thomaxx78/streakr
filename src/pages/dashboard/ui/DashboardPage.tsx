@@ -4,6 +4,7 @@ import { Flame, Zap, Trophy, Calendar, Medal } from 'lucide-react';
 import { useUserProfile } from '@/entities/user';
 import { useHabits } from '@/entities/habit';
 import { useTodayCheckIns } from '@/features/check-in';
+import { useCheckInHistory } from '@/entities/check-in';
 import { calculateLevel, calculateTitle, calculateStreak } from '@/features/gamification';
 import { useAuthStore } from '@/features/auth';
 import { DailyHabits } from '@/widgets/daily-habits';
@@ -44,6 +45,11 @@ function StatsOverview() {
   const { data: habits } = useHabits();
   const { data: todayCheckIns } = useTodayCheckIns();
 
+  const today = new Date().toISOString().split('T')[0] ?? '';
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    .toISOString().split('T')[0] ?? '';
+  const { data: recentCheckIns } = useCheckInHistory(thirtyDaysAgo, today);
+
   const level = calculateLevel(profile.xp);
   const title = calculateTitle(level);
 
@@ -53,7 +59,7 @@ function StatsOverview() {
   ).length;
 
   const checkInsByDate = new Map<string, Set<string>>();
-  todayCheckIns.forEach((ci) => {
+  recentCheckIns.forEach((ci) => {
     const key = ci.checked_at;
     if (!checkInsByDate.has(key)) checkInsByDate.set(key, new Set());
     checkInsByDate.get(key)!.add(ci.habit_id);

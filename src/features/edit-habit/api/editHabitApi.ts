@@ -29,3 +29,11 @@ export async function archiveHabit(habitId: string): Promise<void> {
     .eq('id', habitId);
   if (error) throw new Error(error.message);
 }
+
+export async function restoreHabit(habitId: string): Promise<void> {
+  const { error } = await supabase
+    .from('habits')
+    .update({ is_archived: false })
+    .eq('id', habitId);
+  if (error) throw new Error(error.message);
+}

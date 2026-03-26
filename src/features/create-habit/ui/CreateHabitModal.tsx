@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { useAuthStore } from '@/features/auth';
 import { HABIT_CATEGORIES, HABIT_ICONS } from '@/entities/habit';
 import { Button, Input } from '@/shared/ui';
+import { useToastStore } from '@/shared/lib/useToastStore';
 import { CreateHabitFormSchema, type CreateHabitFormData } from '../model/createHabitSchema';
 import { createHabit } from '../api/createHabitApi';
 import styles from './CreateHabitModal.module.css';
@@ -22,6 +23,7 @@ interface CreateHabitModalProps {
 export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
   const queryClient = useQueryClient();
   const userId = useAuthStore((s) => s.user?.id);
+  const addToast = useToastStore((s) => s.addToast);
 
   const {
     register,
@@ -51,10 +53,14 @@ export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
       if (!userId) throw new Error('User not authenticated');
       return createHabit(data, userId);
     },
-    onSuccess: () => {
+    onSuccess: (habit) => {
       queryClient.invalidateQueries({ queryKey: ['habits'] });
+      addToast(`${habit.icon} "${habit.name}" créée avec succès !`);
       reset();
       onClose();
+    },
+    onError: (err) => {
+      addToast(err instanceof Error ? err.message : 'Erreur lors de la création', 'error');
     },
   });
 

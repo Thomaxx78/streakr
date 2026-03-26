@@ -23,6 +23,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   setLoading: (isLoading) => set({ isLoading }),
 }));
 
+// --- Sélecteurs dérivés (derived state) ---
+export const selectIsAuthenticated = (s: AuthState): boolean => !!s.session;
+export const selectDisplayName = (s: AuthState): string =>
+  (s.user?.user_metadata?.username as string | undefined) ?? 'Streaker';
+export const selectUserId = (s: AuthState): string | null => s.user?.id ?? null;
+
 export const useAuthListener = () => {
   const setSession = useAuthStore((s) => s.setSession);
   const setLoading = useAuthStore((s) => s.setLoading);
