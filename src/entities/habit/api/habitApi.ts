@@ -7,6 +7,7 @@ export async function fetchHabits(userId: string): Promise<Habit[]> {
     .select('*')
     .eq('user_id', userId)
     .eq('is_archived', false)
+    .order('position', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(error.message);

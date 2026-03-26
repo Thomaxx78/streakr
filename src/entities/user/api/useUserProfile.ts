@@ -1,10 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/features/auth';
 import { fetchUserProfile } from './userApi';
 
-export function useUserProfile() {
-  const userId = useAuthStore((s) => s.user?.id);
-
+export function useUserProfile(userId: string | undefined) {
   return useSuspenseQuery({
     queryKey: ['user-profile', userId],
     queryFn: () => {

@@ -1,10 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/features/auth';
 import { fetchCheckInHistory } from './checkInHistoryApi';
 
-export function useCheckInHistory(startDate: string, endDate: string) {
-  const userId = useAuthStore((s) => s.user?.id);
-
+export function useCheckInHistory(
+  userId: string | undefined,
+  startDate: string,
+  endDate: string,
+) {
   return useSuspenseQuery({
     queryKey: ['check-ins', 'history', userId, startDate, endDate],
     queryFn: () => {

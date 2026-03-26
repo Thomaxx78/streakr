@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useHabits } from '@/entities/habit';
 import { Card } from '@/shared/ui';
@@ -12,8 +13,8 @@ const CATEGORY_COLORS: Record<string, string> = {
   créativité: '#FFE66D',
 };
 
-function CategoryBreakdownInner() {
-  const { data: habits } = useHabits();
+function CategoryBreakdownInner({ userId }: { userId: string | undefined }) {
+  const { data: habits } = useHabits(userId);
 
   const counts: Record<string, number> = {};
   for (const h of habits) {
@@ -84,10 +85,11 @@ function CategoryBreakdownInner() {
 }
 
 export function CategoryBreakdown() {
+  const userId = useAuthStore((s) => s.user?.id);
   return (
     <Card className={styles.card}>
       <h3 className={styles.title}>Répartition par catégorie</h3>
-      <CategoryBreakdownInner />
+      <CategoryBreakdownInner userId={userId} />
     </Card>
   );
 }

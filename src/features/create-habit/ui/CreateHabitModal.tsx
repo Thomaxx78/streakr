@@ -41,12 +41,16 @@ export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
       icon: '🎯',
       color: '#FF6B35',
       xp_per_check: 10,
+      frequency_type: 'daily',
+      frequency_count: 1,
     },
   });
 
   const selectedIcon = watch('icon');
   const selectedColor = watch('color');
   const selectedCategory = watch('category');
+  const frequencyType = watch('frequency_type');
+  const frequencyCount = watch('frequency_count');
 
   const mutation = useMutation({
     mutationFn: (data: CreateHabitFormData) => {
@@ -100,6 +104,54 @@ export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
             />
             {errors.description && (
               <span className={styles.error}>{errors.description.message}</span>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>Fréquence</label>
+            <Controller
+              name="frequency_type"
+              control={control}
+              render={({ field }) => (
+                <div className={styles.frequencyToggle}>
+                  <button
+                    type="button"
+                    className={`${styles.freqBtn} ${field.value === 'daily' ? styles.freqBtnActive : ''}`}
+                    onClick={() => field.onChange('daily')}
+                  >
+                    Quotidien
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.freqBtn} ${field.value === 'weekly' ? styles.freqBtnActive : ''}`}
+                    onClick={() => field.onChange('weekly')}
+                  >
+                    Hebdomadaire
+                  </button>
+                </div>
+              )}
+            />
+            {frequencyType === 'weekly' && (
+              <div className={styles.frequencyCount}>
+                <label className={styles.labelSmall}>
+                  Objectif : <strong>{frequencyCount}x / semaine</strong>
+                </label>
+                <Controller
+                  name="frequency_count"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="range"
+                      min={1}
+                      max={7}
+                      step={1}
+                      className={styles.slider}
+                      value={field.value}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  )}
+                />
+              </div>
             )}
           </div>
 
@@ -210,6 +262,9 @@ export function CreateHabitModal({ open, onClose }: CreateHabitModalProps) {
               {watch('name') || 'Aperçu de ton habitude'}
             </span>
             <span className={styles.previewCategory}>{selectedCategory}</span>
+            <span className={styles.previewFreq}>
+              {frequencyType === 'weekly' ? `${frequencyCount}x/sem` : 'Quotidien'}
+            </span>
           </div>
 
           {mutation.error && (

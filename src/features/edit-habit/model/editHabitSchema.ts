@@ -14,6 +14,8 @@ export const EditHabitFormSchema = z.object({
   icon: z.enum(['🎯', '💪', '🧘', '📚', '🏃', '💻', '🎨', '🎵', '💤', '🥗', '💧', '🧠']),
   color: z.string(),
   xp_per_check: z.number().min(5, 'Minimum 5 XP').max(50, 'Maximum 50 XP'),
+  frequency_type: z.enum(['daily', 'weekly']),
+  frequency_count: z.number().min(1).max(7),
 });
 
 export type EditHabitFormData = z.infer<typeof EditHabitFormSchema>;

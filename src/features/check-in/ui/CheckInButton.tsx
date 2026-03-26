@@ -6,15 +6,19 @@ interface CheckInButtonProps {
   habitId: string;
   isChecked: boolean;
   date?: string;
+  onSuccess?: () => void;
 }
 
-export function CheckInButton({ habitId, isChecked, date }: CheckInButtonProps) {
+export function CheckInButton({ habitId, isChecked, date, onSuccess }: CheckInButtonProps) {
   const today = new Date().toISOString().split('T')[0] ?? '';
   const checkDate = date ?? today;
   const { mutate, isPending } = useToggleCheckIn();
 
   const handleClick = () => {
-    mutate({ habitId, date: checkDate, wasChecked: isChecked });
+    mutate(
+      { habitId, date: checkDate, wasChecked: isChecked },
+      { onSuccess: () => { if (!isChecked) onSuccess?.(); } },
+    );
   };
 
   return (

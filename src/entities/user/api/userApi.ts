@@ -13,6 +13,13 @@ export async function updateUserProfile(
     .single();
 
   if (error) throw new Error(error.message);
+
+  // Synchronise user_metadata dans Supabase Auth pour que le header/dashboard
+  // reflètent immédiatement le nouveau username sans reconnexion
+  if (data.username !== undefined) {
+    await supabase.auth.updateUser({ data: { username: data.username } });
+  }
+
   return UserProfileSchema.parse(updated);
 }
 

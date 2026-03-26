@@ -41,14 +41,15 @@ function HabitsSkeleton() {
 }
 
 function StatsOverview() {
-  const { data: profile } = useUserProfile();
-  const { data: habits } = useHabits();
+  const userId = useAuthStore((s) => s.user?.id);
+  const { data: profile } = useUserProfile(userId);
+  const { data: habits } = useHabits(userId);
   const { data: todayCheckIns } = useTodayCheckIns();
 
   const today = new Date().toISOString().split('T')[0] ?? '';
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
     .toISOString().split('T')[0] ?? '';
-  const { data: recentCheckIns } = useCheckInHistory(thirtyDaysAgo, today);
+  const { data: recentCheckIns } = useCheckInHistory(userId, thirtyDaysAgo, today);
 
   const level = calculateLevel(profile.xp);
   const title = calculateTitle(level);

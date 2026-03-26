@@ -30,6 +30,24 @@ export async function fetchRecentCheckIns(userId: string, days = 30): Promise<Ch
   return CheckInListSchema.parse(data);
 }
 
+export async function fetchWeekCheckIns(userId: string): Promise<CheckIn[]> {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = Sunday
+  const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + diff);
+  const mondayStr = monday.toISOString().split('T')[0] ?? '';
+
+  const { data, error } = await supabase
+    .from('check_ins')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('checked_at', mondayStr);
+
+  if (error) throw new Error(error.message);
+  return CheckInListSchema.parse(data);
+}
+
 export async function toggleCheckIn(habitId: string, date: string): Promise<void> {
   const { data: existing, error: fetchError } = await supabase
     .from('check_ins')

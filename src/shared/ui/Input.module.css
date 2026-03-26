@@ -31,7 +31,7 @@
 }
 
 .input::placeholder {
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .inputError {

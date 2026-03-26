@@ -1,7 +1,7 @@
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/features/auth';
 import { useToastStore } from '@/shared/lib/useToastStore';
-import { fetchTodayCheckIns, toggleCheckIn } from '../api/checkInApi';
+import { fetchTodayCheckIns, fetchWeekCheckIns, toggleCheckIn } from '../api/checkInApi';
 
 export function useTodayCheckIns() {
   const userId = useAuthStore((s) => s.user?.id);
@@ -29,5 +29,17 @@ export function useToggleCheckIn() {
       if (!wasChecked) addToast('Check-in enregistré ! +XP 🎯');
     },
     onError: (err) => addToast(err instanceof Error ? err.message : 'Erreur', 'error'),
+  });
+}
+
+export function useWeekCheckIns() {
+  const userId = useAuthStore((s) => s.user?.id);
+
+  return useSuspenseQuery({
+    queryKey: ['check-ins', 'week', userId],
+    queryFn: () => {
+      if (!userId) throw new Error('User not authenticated');
+      return fetchWeekCheckIns(userId);
+    },
   });
 }

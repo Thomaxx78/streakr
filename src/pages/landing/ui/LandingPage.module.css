@@ -83,7 +83,7 @@
 .heroDesc {
   font-size: 1.15rem;
   line-height: 1.6;
-  color: #555;
+  color: var(--color-text-muted);
   max-width: 500px;
 }
 
@@ -193,7 +193,7 @@
 .featureDesc {
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 /* Footer */

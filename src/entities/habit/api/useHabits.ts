@@ -1,10 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/features/auth';
 import { fetchHabits, fetchArchivedHabits } from './habitApi';
 
-export function useHabits() {
-  const userId = useAuthStore((s) => s.user?.id);
-
+export function useHabits(userId: string | undefined) {
   return useSuspenseQuery({
     queryKey: ['habits', userId],
     queryFn: () => {
@@ -14,9 +11,7 @@ export function useHabits() {
   });
 }
 
-export function useArchivedHabits() {
-  const userId = useAuthStore((s) => s.user?.id);
-
+export function useArchivedHabits(userId: string | undefined) {
   return useSuspenseQuery({
     queryKey: ['habits', 'archived', userId],
     queryFn: () => {

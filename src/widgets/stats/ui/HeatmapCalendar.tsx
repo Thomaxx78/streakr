@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth';
 import { useHabits } from '@/entities/habit';
 import { useCheckInHistory } from '@/entities/check-in';
 import type { CheckIn } from '@/entities/check-in';
@@ -61,13 +62,14 @@ function buildCheckInMap(checkIns: CheckIn[]): Map<string, Set<string>> {
 }
 
 interface HeatmapInnerProps {
+  userId: string | undefined;
   startDate: string;
   endDate: string;
   totalHabits: number;
 }
 
-function HeatmapInner({ startDate, endDate, totalHabits }: HeatmapInnerProps) {
-  const { data: checkIns } = useCheckInHistory(startDate, endDate);
+function HeatmapInner({ userId, startDate, endDate, totalHabits }: HeatmapInnerProps) {
+  const { data: checkIns } = useCheckInHistory(userId, startDate, endDate);
 
   const checkInMap = buildCheckInMap(checkIns);
 
@@ -125,11 +127,13 @@ interface HeatmapCalendarProps {
 }
 
 export function HeatmapCalendar({ startDate, endDate }: HeatmapCalendarProps) {
-  const { data: habits } = useHabits();
+  const userId = useAuthStore((s) => s.user?.id);
+  const { data: habits } = useHabits(userId);
 
   return (
     <div className={styles.wrapper}>
       <HeatmapInner
+        userId={userId}
         startDate={startDate}
         endDate={endDate}
         totalHabits={habits.length}

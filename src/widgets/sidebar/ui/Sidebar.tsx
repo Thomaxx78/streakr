@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ListChecks, BarChart3, UserCog, X, Flame } from 'lucide-react';
+import { LayoutDashboard, ListChecks, BarChart3, UserCog, X, Flame, Focus } from 'lucide-react';
 import { useUIStore } from '@/shared/lib/useUIStore';
 import styles from './Sidebar.module.css';
 
@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: '/habits', label: 'Mes Habitudes', icon: ListChecks },
   { to: '/stats', label: 'Statistiques', icon: BarChart3 },
   { to: '/profile', label: 'Profil', icon: UserCog },
+  { to: '/focus', label: 'Mode Focus', icon: Focus },
 ] as const;
 
 export const Sidebar = () => {

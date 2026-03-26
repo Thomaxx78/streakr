@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth';
 import {
   BarChart,
   Bar,
@@ -26,12 +27,13 @@ function getMondayOf(date: Date): Date {
 }
 
 interface StreakChartInnerProps {
+  userId: string | undefined;
   startDate: string;
   endDate: string;
 }
 
-function StreakChartInner({ startDate, endDate }: StreakChartInnerProps) {
-  const { data: checkIns } = useCheckInHistory(startDate, endDate);
+function StreakChartInner({ userId, startDate, endDate }: StreakChartInnerProps) {
+  const { data: checkIns } = useCheckInHistory(userId, startDate, endDate);
 
   const today = new Date();
   const thisMonday = getMondayOf(today);
@@ -99,11 +101,12 @@ interface StreakChartProps {
 }
 
 export function StreakChart({ startDate, endDate }: StreakChartProps) {
+  const userId = useAuthStore((s) => s.user?.id);
   return (
     <Card className={styles.card}>
       <h3 className={styles.title}>Check-ins par semaine</h3>
       <div className={styles.chartWrapper}>
-        <StreakChartInner startDate={startDate} endDate={endDate} />
+        <StreakChartInner userId={userId} startDate={startDate} endDate={endDate} />
       </div>
     </Card>
   );

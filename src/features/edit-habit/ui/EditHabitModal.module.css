@@ -206,6 +206,62 @@
   flex: 1;
 }
 
+.previewFreq {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--color-muted);
+  border: var(--border-thin);
+  border-radius: var(--radius);
+  padding: 2px 6px;
+}
+
+.frequencyToggle {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.freqBtn {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--color-card);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.freqBtn:hover {
+  transform: translate(-1px, -1px);
+}
+
+.freqBtnActive {
+  background: var(--color-fg);
+  color: var(--color-bg);
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.frequencyCount {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-muted);
+  border: var(--border-thin);
+  border-radius: var(--radius);
+}
+
+.labelSmall {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
 .serverError {
   background: var(--color-danger);
   color: white;

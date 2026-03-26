@@ -12,6 +12,7 @@ import {
   calculateXpToNextLevel,
 } from '@/features/gamification';
 import { useUserProfile, useUpdateProfile } from '@/entities/user';
+import { useBadges, BadgeCard, ALL_BADGE_TYPES } from '@/entities/badge';
 import { useUIStore } from '@/shared/lib/useUIStore';
 import { Input, Button } from '@/shared/ui';
 import styles from './ProfilePage.module.css';
@@ -48,8 +49,8 @@ const ACCENT_COLORS = [
 
 function ProfileSection() {
   const user = useAuthStore((s) => s.user);
-  const { data: profile } = useUserProfile();
-  const { mutate: updateProfile, isPending } = useUpdateProfile();
+  const { data: profile } = useUserProfile(user?.id);
+  const { mutate: updateProfile, isPending } = useUpdateProfile(user?.id);
   const [isEditing, setIsEditing] = useState(false);
 
   const {
@@ -136,7 +137,8 @@ function ProfileSection() {
 }
 
 function GamificationSection() {
-  const { data: profile } = useUserProfile();
+  const userId = useAuthStore((s) => s.user?.id);
+  const { data: profile } = useUserProfile(userId);
 
   const level = calculateLevel(profile.xp);
   const title = calculateTitle(level);
@@ -185,6 +187,31 @@ function GamificationSection() {
   );
 }
 
+function BadgesSection() {
+  const userId = useAuthStore((s) => s.user?.id);
+  const { data: earned } = useBadges(userId);
+  const earnedMap = new Map(earned.map((b) => [b.badge_type, b.earned_at]));
+
+  return (
+    <div className={styles.card}>
+      <h2 className={styles.cardTitle}>Badges</h2>
+      <div className={styles.badgesGrid}>
+        {ALL_BADGE_TYPES.map((type) => {
+          const earnedAt = earnedMap.get(type);
+          return (
+            <BadgeCard
+              key={type}
+              badgeType={type}
+              earnedAt={earnedAt}
+              locked={!earnedAt}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function PreferencesSection() {
   const accentColor = useUIStore((s) => s.accentColor);
   const setAccentColor = useUIStore((s) => s.setAccentColor);
@@ -192,6 +219,7 @@ function PreferencesSection() {
   return (
     <div className={styles.card}>
       <h2 className={styles.cardTitle}>Préférences</h2>
+
       <p className={styles.prefLabel}>Couleur d'accent</p>
       <div className={styles.colorGrid}>
         {ACCENT_COLORS.map(({ color, label }) => (
@@ -220,6 +248,11 @@ function ProfileContent() {
       <ErrorBoundary fallback={<p className={styles.error}>Erreur gamification</p>}>
         <Suspense fallback={<div className={styles.skeleton} style={{ height: 320 }} />}>
           <GamificationSection />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<p className={styles.error}>Erreur badges</p>}>
+        <Suspense fallback={<div className={styles.skeleton} style={{ height: 180 }} />}>
+          <BadgesSection />
         </Suspense>
       </ErrorBoundary>
       <PreferencesSection />

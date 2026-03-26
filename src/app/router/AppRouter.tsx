@@ -6,6 +6,7 @@ import { DashboardPage } from '@/pages/dashboard';
 import { HabitsPage } from '@/pages/habits';
 import { StatsPage } from '@/pages/stats';
 import { ProfilePage } from '@/pages/profile';
+import { FocusPage } from '@/pages/focus';
 import { ProtectedRoute } from './ProtectedRoute';
 import { GuestRoute } from './GuestRoute';
 import { AppLayout } from './AppLayout';
@@ -25,6 +26,7 @@ export const AppRouter = () => {
           <Route path="/habits" element={<HabitsPage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/focus" element={<FocusPage />} />
         </Route>
 
         {/* Catch all */}

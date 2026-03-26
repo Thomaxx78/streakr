@@ -260,6 +260,7 @@
   outline-offset: 2px;
 }
 
+
 /* Skeleton & error */
 .skeleton {
   background: linear-gradient(90deg, var(--color-muted) 25%, #eee 50%, var(--color-muted) 75%);
@@ -277,4 +278,16 @@
 .error {
   color: var(--color-danger);
   padding: var(--space-md);
+}
+
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (max-width: 480px) {
+  .badgesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

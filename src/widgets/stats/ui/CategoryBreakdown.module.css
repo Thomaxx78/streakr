@@ -55,7 +55,7 @@
 }
 
 .empty {
-  color: #999;
+  color: var(--color-text-muted);
   font-style: italic;
   padding: var(--space-lg) 0;
   text-align: center;

@@ -38,8 +38,13 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
       icon: habit.icon as EditHabitFormData['icon'],
       color: habit.color,
       xp_per_check: habit.xp_per_check,
+      frequency_type: habit.frequency_type,
+      frequency_count: habit.frequency_count,
     },
   });
+
+  const frequencyType = watch('frequency_type');
+  const frequencyCount = watch('frequency_count');
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ['habits'] });
@@ -71,10 +76,6 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
     }
   };
 
-  const handleArchive = () => {
-    archiveMutation.mutate();
-  };
-
   const selectedIcon = watch('icon');
   const selectedColor = watch('color');
 
@@ -104,6 +105,54 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
             />
             {errors.description && (
               <span className={styles.error}>{errors.description.message}</span>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>Fréquence</label>
+            <Controller
+              name="frequency_type"
+              control={control}
+              render={({ field }) => (
+                <div className={styles.frequencyToggle}>
+                  <button
+                    type="button"
+                    className={`${styles.freqBtn} ${field.value === 'daily' ? styles.freqBtnActive : ''}`}
+                    onClick={() => field.onChange('daily')}
+                  >
+                    Quotidien
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.freqBtn} ${field.value === 'weekly' ? styles.freqBtnActive : ''}`}
+                    onClick={() => field.onChange('weekly')}
+                  >
+                    Hebdomadaire
+                  </button>
+                </div>
+              )}
+            />
+            {frequencyType === 'weekly' && (
+              <div className={styles.frequencyCount}>
+                <label className={styles.labelSmall}>
+                  Objectif : <strong>{frequencyCount}x / semaine</strong>
+                </label>
+                <Controller
+                  name="frequency_count"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="range"
+                      min={1}
+                      max={7}
+                      step={1}
+                      className={styles.slider}
+                      value={field.value}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  )}
+                />
+              </div>
             )}
           </div>
 
@@ -207,12 +256,15 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
             >
               {watch('name') || habit.name}
             </span>
+            <span className={styles.previewFreq}>
+              {frequencyType === 'weekly' ? `${frequencyCount}x/sem` : 'Quotidien'}
+            </span>
           </div>
 
           {(updateMutation.error || deleteMutation.error || archiveMutation.error) && (
             <p className={styles.serverError}>
               {(updateMutation.error ?? deleteMutation.error ?? archiveMutation.error) instanceof Error
-                ? (updateMutation.error ?? deleteMutation.error ?? archiveMutation.error as Error).message
+                ? ((updateMutation.error ?? deleteMutation.error ?? archiveMutation.error) as Error).message
                 : 'Erreur'}
             </p>
           )}
@@ -223,7 +275,7 @@ export function EditHabitModal({ habit, onClose }: EditHabitModalProps) {
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={handleArchive}
+                onClick={() => archiveMutation.mutate()}
                 isLoading={archiveMutation.isPending}
               >
                 <Archive size={14} /> Archiver

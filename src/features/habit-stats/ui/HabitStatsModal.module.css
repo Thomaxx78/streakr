@@ -1,0 +1,188 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: var(--space-md);
+}
+
+.modal {
+  background: var(--color-card);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 420px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: var(--border);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.habitIcon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+
+.category {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.closeBtn {
+  background: none;
+  border: var(--border);
+  border-radius: var(--radius);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.closeBtn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.content {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.statCard {
+  background: var(--color-muted);
+  border: var(--border-thin);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+  box-shadow: 2px 2px 0 var(--color-border);
+}
+
+.statIcon {
+  color: var(--color-primary);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.rateSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.rateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rateLabel {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.rateValue {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 16px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--color-muted);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-success);
+  border-right: 2px solid var(--color-border);
+  transition: width 0.4s ease;
+}
+
+.freqInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-muted);
+  border: var(--border-thin);
+  border-radius: var(--radius);
+}
+
+.freqLabel {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.freqValue {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.loading {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.error {
+  padding: var(--space-md);
+  color: var(--color-danger);
+  font-weight: 600;
+}

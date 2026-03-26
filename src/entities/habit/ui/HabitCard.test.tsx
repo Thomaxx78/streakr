@@ -14,6 +14,9 @@ const mockHabit: Habit = {
   xp_per_check: 10,
   is_archived: false,
   created_at: '2024-01-01',
+  frequency_type: 'daily',
+  frequency_count: 1,
+  position: null,
 };
 
 describe('HabitCard', () => {

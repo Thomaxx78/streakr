@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@/features/auth';
 import { updateUserProfile } from './userApi';
 import type { UserProfile } from '../model/userSchema';
 
-export function useUpdateProfile() {
+export function useUpdateProfile(userId: string | undefined) {
   const queryClient = useQueryClient();
-  const userId = useAuthStore((s) => s.user?.id);
 
   return useMutation({
     mutationFn: (

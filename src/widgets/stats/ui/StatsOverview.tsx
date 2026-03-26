@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth';
 import type { ReactNode } from 'react';
 import { Flame, CheckCircle2, BarChart3, Star } from 'lucide-react';
 import { useCheckInHistory } from '@/entities/check-in';
@@ -104,13 +105,14 @@ function computePerfectDays(checkIns: CheckIn[], totalHabits: number): number {
 }
 
 interface StatsOverviewInnerProps {
+  userId: string | undefined;
   startDate: string;
   endDate: string;
   totalHabits: number;
 }
 
-function StatsOverviewInner({ startDate, endDate, totalHabits }: StatsOverviewInnerProps) {
-  const { data: checkIns } = useCheckInHistory(startDate, endDate);
+function StatsOverviewInner({ userId, startDate, endDate, totalHabits }: StatsOverviewInnerProps) {
+  const { data: checkIns } = useCheckInHistory(userId, startDate, endDate);
 
   const bestStreak = computeBestStreak(checkIns, totalHabits);
   const totalCheckIns = checkIns.length;
@@ -153,9 +155,11 @@ interface StatsOverviewProps {
 }
 
 export function StatsOverview({ startDate, endDate }: StatsOverviewProps) {
-  const { data: habits } = useHabits();
+  const userId = useAuthStore((s) => s.user?.id);
+  const { data: habits } = useHabits(userId);
   return (
     <StatsOverviewInner
+      userId={userId}
       startDate={startDate}
       endDate={endDate}
       totalHabits={habits.length}

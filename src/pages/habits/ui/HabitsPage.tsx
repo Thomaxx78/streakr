@@ -1,11 +1,31 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
-import { Plus, Search, Pencil, Archive, RotateCcw } from 'lucide-react';
+import { Plus, Search, Pencil, Archive, RotateCcw, GripVertical, BarChart2 } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useAuthStore } from '@/features/auth';
 import { useHabits, useArchivedHabits, HabitCard, HABIT_CATEGORIES, type Habit } from '@/entities/habit';
 import { CreateHabitModal } from '@/features/create-habit';
 import { EditHabitModal } from '@/features/edit-habit';
 import { restoreHabit } from '@/features/edit-habit';
+import { useReorderHabits } from '@/features/reorder-habits';
+import { HabitStatsModal } from '@/features/habit-stats';
 import { Button, Input } from '@/shared/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styles from './HabitsPage.module.css';
@@ -29,20 +49,99 @@ function HabitsListSkeleton() {
   );
 }
 
+interface SortableHabitRowProps {
+  habit: Habit;
+  isDragEnabled: boolean;
+  onEdit: (habit: Habit) => void;
+  onStats: (habit: Habit) => void;
+}
+
+function SortableHabitRow({ habit, isDragEnabled, onEdit, onStats }: SortableHabitRowProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: habit.id,
+    disabled: !isDragEnabled,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className={styles.sortableRow}>
+      {isDragEnabled && (
+        <button
+          type="button"
+          className={styles.dragHandle}
+          {...attributes}
+          {...listeners}
+          aria-label="Réordonner"
+        >
+          <GripVertical size={18} />
+        </button>
+      )}
+      <div className={styles.habitCardWrapper}>
+        <HabitCard
+          habit={habit}
+          actions={
+            <div className={styles.habitActions}>
+              <Button variant="ghost" size="sm" onClick={() => onStats(habit)}>
+                <BarChart2 size={14} />
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => onEdit(habit)}>
+                <Pencil size={14} /> Modifier
+              </Button>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
 interface HabitListProps {
+  userId: string | undefined;
   search: string;
   category: string;
   onEdit: (habit: Habit) => void;
+  onStats: (habit: Habit) => void;
 }
 
-function HabitList({ search, category, onEdit }: HabitListProps) {
-  const { data: habits } = useHabits();
+function HabitList({ userId, search, category, onEdit, onStats }: HabitListProps) {
+  const { data: habitsFromQuery } = useHabits(userId);
+  const { mutate: reorder } = useReorderHabits();
+  const [habits, setHabits] = useState(habitsFromQuery);
+
+  useEffect(() => {
+    setHabits(habitsFromQuery);
+  }, [habitsFromQuery]);
+
+  const isDragEnabled = search === '' && category === '';
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   const filtered = habits.filter((h) => {
     const matchSearch = h.name.toLowerCase().includes(search.toLowerCase());
     const matchCat = category === '' || h.category === category;
     return matchSearch && matchCat;
   });
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setHabits((prev) => {
+      const oldIdx = prev.findIndex((h) => h.id === active.id);
+      const newIdx = prev.findIndex((h) => h.id === over.id);
+      const reordered = arrayMove(prev, oldIdx, newIdx);
+      reorder(reordered.map((h, i) => ({ id: h.id, position: i })));
+      return reordered;
+    });
+  };
 
   if (filtered.length === 0) {
     return (
@@ -57,24 +156,26 @@ function HabitList({ search, category, onEdit }: HabitListProps) {
   }
 
   return (
-    <div className={styles.list}>
-      {filtered.map((habit) => (
-        <HabitCard
-          key={habit.id}
-          habit={habit}
-          actions={
-            <Button variant="ghost" size="sm" onClick={() => onEdit(habit)}>
-              <Pencil size={14} /> Modifier
-            </Button>
-          }
-        />
-      ))}
-    </div>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={habits.map((h) => h.id)} strategy={verticalListSortingStrategy}>
+        <div className={styles.list}>
+          {filtered.map((habit) => (
+            <SortableHabitRow
+              key={habit.id}
+              habit={habit}
+              isDragEnabled={isDragEnabled}
+              onEdit={onEdit}
+              onStats={onStats}
+            />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 }
 
-function ArchivedList() {
-  const { data: habits } = useArchivedHabits();
+function ArchivedList({ userId }: { userId: string | undefined }) {
+  const { data: habits } = useArchivedHabits(userId);
   const queryClient = useQueryClient();
 
   const restoreMutation = useMutation({
@@ -117,6 +218,8 @@ export function HabitsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editHabit, setEditHabit] = useState<Habit | null>(null);
+  const [statsHabit, setStatsHabit] = useState<Habit | null>(null);
+  const userId = useAuthStore((s) => s.user?.id);
   const [tab, setTab] = useState<'active' | 'archived'>('active');
 
   const search = searchParams.get('search') ?? '';
@@ -196,15 +299,26 @@ export function HabitsPage() {
               </button>
             ))}
           </div>
+          {search === '' && category === '' && (
+            <p className={styles.dragHint}>
+              Glisse les habitudes pour les réordonner
+            </p>
+          )}
         </div>
       )}
 
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Suspense fallback={<HabitsListSkeleton />}>
           {tab === 'active' ? (
-            <HabitList search={search} category={category} onEdit={setEditHabit} />
+            <HabitList
+              userId={userId}
+              search={search}
+              category={category}
+              onEdit={setEditHabit}
+              onStats={setStatsHabit}
+            />
           ) : (
-            <ArchivedList />
+            <ArchivedList userId={userId} />
           )}
         </Suspense>
       </ErrorBoundary>
@@ -218,6 +332,13 @@ export function HabitsPage() {
         <EditHabitModal
           habit={editHabit}
           onClose={() => setEditHabit(null)}
+        />
+      )}
+
+      {statsHabit && (
+        <HabitStatsModal
+          habit={statsHabit}
+          onClose={() => setStatsHabit(null)}
         />
       )}
     </div>
