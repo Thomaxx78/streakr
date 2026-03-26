@@ -4,8 +4,7 @@ Tracker d'habitudes gamifié en style **neo-brutalism**. Crée tes habitudes, co
 
 ## 🚀 Production
 
-> **[streakr.vercel.app](https://streakr.vercel.app)** ← lien à mettre à jour après déploiement
-
+> **[streakr.vercel.app](https://streakr-chi.vercel.app/)** 
 ---
 
 ## 🛠 Stack technique & justifications
